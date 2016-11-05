@@ -6,7 +6,7 @@ import datetime
 import os
 
 before=datetime.datetime(2000,1,1) # start year 2000
-after=datetime.datetime(2010,12,31) # end year 2010
+after=datetime.datetime(2016,10,31) # end year 2016 (october)
 
 findMondays = rrule.rrule(rrule.WEEKLY,byweekday=relativedelta.MO,dtstart=before) # function to find all the monday dates
 findSundays = rrule.rrule(rrule.WEEKLY,byweekday=relativedelta.SU,dtstart=before) # function to find all the sunday dates
