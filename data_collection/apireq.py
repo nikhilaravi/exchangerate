@@ -1,25 +1,28 @@
 import requests, json
-
 import dateutil.relativedelta as relativedelta
 import dateutil.rrule as rrule
 from dateutil.parser import *
 import datetime
 import os
 
-before=datetime.datetime(2000,1,1)
-after=datetime.datetime(2010,12,31)
-findMondays = rrule.rrule(rrule.WEEKLY,byweekday=relativedelta.MO,dtstart=before)
-findSundays = rrule.rrule(rrule.WEEKLY,byweekday=relativedelta.SU,dtstart=before)
-startDates =  [date.date() for date in findMondays.between(before,after,inc=True)]
-endDates =  [date.date() for date in findSundays.between(before,after,inc=True)]
+before=datetime.datetime(2000,1,1) # start year 2000
+after=datetime.datetime(2010,12,31) # end year 2010
 
+findMondays = rrule.rrule(rrule.WEEKLY,byweekday=relativedelta.MO,dtstart=before) # function to find all the monday dates
+findSundays = rrule.rrule(rrule.WEEKLY,byweekday=relativedelta.SU,dtstart=before) # function to find all the sunday dates
+
+startDates =  [date.date() for date in findMondays.between(before,after,inc=True)] # find all the monday dates between the start and end year
+endDates =  [date.date() for date in findSundays.between(before,after,inc=True)] # find all the sunday dates between the start and end year
+
+# sections of the api which we want to query
 sections = ['business', 'politics', 'world', 'uk-news']
 
 apiKey = '74b9c625-6033-46be-b0e6-7b020a1f4d15'
 
+# format the url for the request
 def makeurl(options):
-    print options
     base = 'http://content.guardianapis.com/search?&api-key=' + apiKey + '&show-most-viewed=True&show-fields=body&page-size=50';
+
     if options['startDate']:
         base = base + '&from-date=' + str(options['startDate'])
     if options['endDate']:
@@ -28,18 +31,21 @@ def makeurl(options):
         base = base + '&section=' + options['section']
     if options.get('query'):
         base = base + '&q=' + options['query']
+
     print 'requesting url: ', base
+
     return base;
 
-for i in range(len(startDate)):
-    
+# iterate through all the weeks
+for week in range(len(startDate)):
+
     # loop through the sections
     for section in sections:
 
         # create options object
         options = {}
-        options['startDate'] = startDates[i]
-        options['endDate'] = endDates[i+1]
+        options['startDate'] = startDates[week]
+        options['endDate'] = endDates[week+1]
         options['section'] = section
         if section == 'world':
             options['query'] = 'us%20OR%20uk%20OR%20eu'
@@ -62,7 +68,7 @@ for i in range(len(startDate)):
             body = articles[0]['fields']['body']
             # format the file name of the format: article/weekbeg/section/number.html
 
-            filename = 'articles/' + str(startDates[i]) + '/' + str(section) + '/' + str(num) + '.html'
+            filename = 'articles/' + str(startDates[week]) + '/' + str(section) + '/' + str(num) + '.html'
 
             # check if the folder and file exist or create it if not
             if not os.path.exists(os.path.dirname(filename)):
