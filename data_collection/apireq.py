@@ -4,6 +4,9 @@ import dateutil.rrule as rrule
 from dateutil.parser import *
 import datetime
 import os
+from helpers import article_text, makeurl
+import pandas as pd
+import numpy as np
 
 before=datetime.datetime(2000,1,1) # start year 2000
 after=datetime.datetime(2016,10,31) # end year 2016 (october)
@@ -17,70 +20,55 @@ endDates =  [date.date() for date in findSundays.between(before,after,inc=True)]
 # sections of the api which we want to query
 sections = ['business', 'politics', 'world', 'uk-news']
 
-apiKey = '74b9c625-6033-46be-b0e6-7b020a1f4d15'
-
-# format the url for the request
-def makeurl(options):
-    base = 'http://content.guardianapis.com/search?&api-key=' + apiKey + '&show-most-viewed=True&show-fields=body&page-size=50';
-
-    if options['startDate']:
-        base = base + '&from-date=' + str(options['startDate'])
-    if options['endDate']:
-        base = base + '&to-date=' + str(options['endDate'])
-    if options['section']:
-        base = base + '&section=' + options['section']
-    if options.get('query'):
-        base = base + '&q=' + options['query']
-
-    print 'requesting url: ', base
-
-    return base;
+columns=['Year', 'Week Start', 'Week End', 'Section', 'Number', 'Headline', 'Body Text']
+article_db = pd.DataFrame(columns=columns)
 
 # iterate through all the weeks
-for week in range(len(startDate)):
+for week in range(807,len(startDates)-1):
+
+    startDate = startDates[week]
+    endDate = endDates[week+1]
+
+    print 'Year: ', startDate.year, '   Week Beginning', startDate
 
     # loop through the sections
     for section in sections:
 
         # create options object
         options = {}
-        options['startDate'] = startDates[week]
-        options['endDate'] = endDates[week+1]
+        options['startDate'] = startDate
+        options['endDate'] = endDate
         options['section'] = section
         if section == 'world':
             options['query'] = 'us%20OR%20uk%20OR%20eu'
 
         # make the request after formatting the url with the correct query parameters
-        r = requests.get(makeurl(options))
-
+        req = requests.get(makeurl(options))
         # turn response into json
-        jtext = json.loads(r.text)
-        response = jtext['response']
+        jtext = json.loads(req.text)
+        response = jtext.get('response')
 
         # extract the array of articles
-        articles = response['results']
+        articles = response.get('results')
 
-        print 'Num articles in section: ', section, response['pageSize']*response['pages']
+        # print 'Num articles in section: ', section, response['pageSize']*response['pages']
 
         # iterate through the first 30 articles
         for num, article in enumerate(articles[0:30]):
             # get the body text of the article
-            body = articles[0]['fields']['body']
-            # format the file name of the format: article/weekbeg/section/number.html
-
-            filename = 'articles/' + str(startDates[week]) + '/' + str(section) + '/' + str(num) + '.html'
-
-            # check if the folder and file exist or create it if not
-            if not os.path.exists(os.path.dirname(filename)):
-                try:
-                    os.makedirs(os.path.dirname(filename))
-                except OSError as exc:
-                    if exc.errno != errno.EEXIST:
-                        raise
-
-            # open the file
-            f = open(filename, 'w')
+            body = article['fields']['body']
+            headline = article['fields']['headline']
             # convert the body html to a string
-            bodyText = str(body.encode("utf-8"))
-            # write the html to the file
-            f.write(bodyText)
+            bodyHTML = str(body.encode("utf-8"))
+            # extract text from html
+            bodyText = article_text(body).encode("utf-8")
+            headlineText = article_text(headline).encode("utf-8")
+
+            # create a row of data to append to DF
+            row = np.reshape([startDate.year, startDate, endDate, section, num, headlineText, bodyText], (1,7))
+
+            article_df = pd.DataFrame(row, columns=columns)
+            # article_db = article_db.append(article_df)
+
+            with open('./articles/articles_db.csv', 'a') as f:
+                article_df.to_csv(f, header=False)
