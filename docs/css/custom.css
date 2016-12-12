@@ -7,3 +7,15 @@
 .github-fork-ribbon:before {
   padding: 1.38em 0;
 }
+
+.exchange_rate_image {
+  background-image: url('../img/sentiment_exchange_correlation.png');
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+  text-align: center;
+}

@@ -98,7 +98,17 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Overview</h2>
-                    <h3 class="section-subheading text-muted">Exchange rate forecasting is a challenging problem. </h3>
+                    <p class="section-subheading">
+                      Exchange rates are important indicators of real and perceived economic performance.
+                      Fluctuations in a country's exchange rate directly reflect changes in economic confidence.
+                      This was particularly salient during the recent global financial crisis and Brexit referendum.
+                      Furthermore, foreign exchange is one of the most liquid assets traded in the global financial markets.
+                      This means that any relevant news or development about a country's economy is very quickly reflected in the exchange rate movements, and secondly this also increases the role of trading speculation on affecting the short-term fluctuations of an exchange rate.
+                      These proporties of exchange rates mean that prediction of exchange rates is very difficult in practice.
+                    </p>
+                    <p>
+                      In this project, we aim to predict future exchange rates at a weekly level. We apply techniques from time series analysis and natural language processing to identity trends in the exchange rate for prediction. We hypothesise that changes in business news sentiment can be used to predict movements in the exchange rate, leading to more accurate predictors when combined with predictors from time series analysis. Our goal is to build a model that incorporates sentiment analysis of news articles sourced from The Guardian in order to predict US-UK exchange rates in the 2000-2016 time frame.
+                    </p>
                 </div>
             </div>
         </div>
@@ -156,11 +166,31 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Sentiment</h2>
-                    <h3 class="section-subheading text-muted">Sentiment Analysis of article text was performed using the following methodology:</h3>
-                    <ol>
-                      <li>Tokenising ....</li>
-                    <ol>
+                    <h3 class="section-subheading text-muted">Sentiment analysis of news articles was performed using SentiWordNet, a public dictionary of words with sentiment scores, which has been trained via semi-supervised learning.</h3>
+                    <h2>SentiWordNet Methodology</h2>
+                    <h3>Selection of Relevant Articles</h3>
+                    <p>
+                      From all the articles scrapped using an API of The Gaurdian newspaper, we first filtered based on relevance to exchnage rates. This involve building a small dictionary of words and phrases which would indicate relevance to exchnage rate, and then search all the articles for the disctionary content. After some data exploration and visualisation, we determined the minimum number of words and phrases required for matching in order to class an article as being relevant (ensuring that a sufficient number of articles were classed as relevant weekly in order to generate weekly sentiment scores).
+                    </p>
+                    <h3>Tokenizing: article body text was split into sentences, and further into words</h3>
+                    <p>
+                      SentinetWordNet provides a trained index of words and their corresponding positive, negtiave and netural sentiments (where the sum of these sentiments equal 1). To generate sentiments at an article level, we tokenised articles into words and used the mean average sentiment as the sentiment score for the entire article.
+                      A potential problem behind this method is that we may not obtain accurate sentiments for sections of the artivle which depend on more sophisticated understand of the natural language at a sentence or a phrase level. However, given the computation time required to use more sophisticated natural language techniques (such as Word2Vec or Doc2Vec) and the total number of articles to be considered across the time period, we proceed with the simpler model.
+                    </p>
+                    <h3>Filtering Neutrality: Removing sentences with neutral sentiment from the original article</h3>
+                    <p>
+                      Given each article, we removed any sentences which had very high neutal sentiment scores. This ensured that our sentiment score generator would only focus on sentences which implied strong sentiment, resolving a previous problem of obtaining very low positive/negative sentiment scores from our model
+                    </p>
+                    <h3>Weekly sentiment: Averaging article sentiments at a weekly level to obtain weekly sentiment scores.</h3>
+                    <p>
+                      Having developed a method to generate sentiment scores for a given article, we simply took the mean average of the articles at a given week to generate the sentiment scores associated to that week. For future work, it may be worth considering potential ways to weight different articles' sentiments based on factors such as their popularity.
+                    </p>
+                    <h3>Smoothing: Using a rolling average of preceding weeks’ sentiments to reduce the weekly variance of sentiment scores.</h3>
+                    <p>
+                      Having generated weekly sentiment scores, initially the high weekly variance did not allow any visible trends to be noticed. We resolved this by smoothing the weekly sentiment scores using a rolling average of a fixed number of preceding weeks. The number of preceding weeks use to smoothen the scentiment scores was chosen by maximising the correlation between the exchange rate and the sentiment score time series. The smoothened sentiment scores now shows visible correlation with the exchange rate, especially during times such as the Brexit Referendum, as can be seen below.
+                    </p>
                 </div>
+                <div class='exchange_rate_image'></div>
             </div>
         </div>
     </section>
