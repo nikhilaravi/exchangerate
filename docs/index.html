@@ -21,10 +21,10 @@
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.0/gh-fork-ribbon.min.css" />
-    <link href="./css/custom.css" rel="stylesheet" type="text/css">
 
     <!-- Theme CSS -->
     <link href="css/agency.min.css" rel="stylesheet">
+    <link href="./css/custom.css" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -70,10 +70,20 @@
                         <a class="page-scroll" href="#forecasting">Forecasting</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#references">References</a>
+                        <a class="page-scroll" href="#conclusions">Conclusions</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="./time_series_notebook.html">Code</a>
+                      <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Code
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-option" href="./time_series_notebook.html">Data Collection and Exploration</a></li>
+                          <li><a class="dropdown-option" href="./time_series_notebook.html">Sentiment Analysis</a></li>
+                          <li><a class="dropdown-option" href="./time_series_notebook.html">Time Series Analysis</a></li>
+                          <li><a class="dropdown-option" href="./time_series_notebook.html">Forecasting</a></li>
+                        </ul>
+                      </div>
                     </li>
                 </ul>
             </div>
@@ -120,7 +130,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Data Collection and Exploration</h2>
-                    <h3 class="section-subheading text-muted">Economic and News data was collected and cleaned</h3>
+                    <h3 class="section-subheading text-muted">Economic and News data was collected over a 16 year period from 2010-2016 and cleaned to provide weekly data</h3>
                 </div>
             </div>
             <div class="row text-center">
@@ -131,11 +141,9 @@
                     </span>
                     <h4 class="service-heading">News Data</h4>
                     <p class="section-subheading text-muted">News data was collected from The Guardian, a British newspaper. The top 30 news articles each week in the period 2010-2016 was collected using the Guardian API and saved to a csv file which was saved to AWS S3</p>
-                    <p class="section-subheading text-muted">The articles were then filtered ....</p>
-                    <ol class="text-muted">
-                      <li>Only business news</li>
-                      <li>Filtered by presence of economic words</li>
-                    <ol>
+                    <p class="section-subheading text-muted">The articles were then filtered for only business news and only articles which contained words which relevant determined by the presences of words related to the economic health
+                    </p>
+                    <img class='image_graph' align="middle" src='./img/exchangerate.png'/>
                 </div>
                 <div class="col-md-6">
                     <span class="fa-stack fa-4x">
@@ -143,7 +151,11 @@
                         <i class="fa fa-money fa-stack-1x fa-inverse"></i>
                     </span>
                     <h4 class="service-heading">Economic Indicator Data</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <p class="text-muted">Daily data on the UK-US exchange rate at market closing was obtained from the Bank of England's Statistical Interactive Database for the January 2000 to October 2016 time frame. Data was aggregated to the weekly level to align with our sentiment analyses and news article data. This data is plotted below:
+
+                    Time periods of note are the Global Financial Crisis that occurred roughly around 2008, and the Brexit referendum in the summer of 2016.
+                  </p>
+                  <img class='image_graph' align="middle" src='./img/exchangerate.png'/>
                 </div>
             </div>
         </div>
@@ -156,6 +168,21 @@
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Time Series Analysis</h2>
                     <h3 class="section-subheading text-muted">Several time series models were used to model the economic indicator data</h3>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="section-heading">Exchange Rate Series</h3>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="section-heading">Stationarity</h3>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="section-heading">Differencing</h3>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="section-heading">Baseline Model</h3>
+                </div>
+                <div class="col-lg-12">
+                    <h3 class="section-heading">Regression Models</h3>
                 </div>
             </div>
         </div>
@@ -190,8 +217,11 @@
                       Having generated weekly sentiment scores, initially the high weekly variance did not allow any visible trends to be noticed. We resolved this by smoothing the weekly sentiment scores using a rolling average of a fixed number of preceding weeks. The number of preceding weeks use to smoothen the scentiment scores was chosen by maximising the correlation between the exchange rate and the sentiment score time series. The smoothened sentiment scores now shows visible correlation with the exchange rate, especially during times such as the Brexit Referendum, as can be seen below.
                     </p>
                 </div>
-                <div class='exchange_rate_image'></div>
+                <img class='image_graph' align="middle" src='./img/sentiment_exchange_correlation.png'/>
             </div>
+        </div>
+        <div class="container">
+              <a class="page-scroll btn btn-xl" href="./time_series_notebook.html">View the Code</a>
         </div>
     </section>
 
@@ -201,13 +231,23 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Forecasting</h2>
-                    <h3 class="section-subheading text-muted">Several time series models were used to model the economic indicator data</h3>
+                    <h3 class="section-subheading text-muted">The time series models were used to generate forecasts of the exchange rate for different forecast horizons</h3>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="references" class="bg-light-gray">
+    <section id="conclusions" class="bg-light-gray">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Conclusions</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-light-gray">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
