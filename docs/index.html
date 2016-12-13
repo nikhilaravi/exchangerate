@@ -78,9 +78,9 @@
                           <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-option" href="./time_series_notebook.html">Data Collection and Exploration</a></li>
-                          <li><a class="dropdown-option" href="./time_series_notebook.html">Sentiment Analysis</a></li>
-                          <li><a class="dropdown-option" href="./time_series_notebook.html">Time Series Analysis</a></li>
+                          <li><a class="dropdown-option" href="./time_series_notebook.html">Data</a></li>
+                          <li><a class="dropdown-option" href="./time_series_notebook.html">Sentiment</a></li>
+                          <li><a class="dropdown-option" href="./time_series_notebook.html">Time Series</a></li>
                           <li><a class="dropdown-option" href="./time_series_notebook.html">Forecasting</a></li>
                         </ul>
                       </div>
@@ -108,7 +108,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Overview</h2>
-                    <p class="section-subheading">
+                    <p class="section-subheading page-body-text">
                       Exchange rates are important indicators of real and perceived economic performance.
                       Fluctuations in a country's exchange rate directly reflect changes in economic confidence.
                       This was particularly salient during the recent global financial crisis and Brexit referendum.
@@ -116,7 +116,7 @@
                       This means that any relevant news or development about a country's economy is very quickly reflected in the exchange rate movements, and secondly this also increases the role of trading speculation on affecting the short-term fluctuations of an exchange rate.
                       These proporties of exchange rates mean that prediction of exchange rates is very difficult in practice.
                     </p>
-                    <p>
+                    <p class='page-body-text'>
                       In this project, we aim to predict future exchange rates at a weekly level. We apply techniques from time series analysis and natural language processing to identity trends in the exchange rate for prediction. We hypothesise that changes in business news sentiment can be used to predict movements in the exchange rate, leading to more accurate predictors when combined with predictors from time series analysis. Our goal is to build a model that incorporates sentiment analysis of news articles sourced from The Guardian in order to predict US-UK exchange rates in the 2000-2016 time frame.
                     </p>
                 </div>
@@ -143,7 +143,7 @@
                     <p class="section-subheading text-muted">News data was collected from The Guardian, a British newspaper. The top 30 news articles each week in the period 2010-2016 was collected using the Guardian API and saved to a csv file which was saved to AWS S3</p>
                     <p class="section-subheading text-muted">The articles were then filtered for only business news and only articles which contained words which relevant determined by the presences of words related to the economic health
                     </p>
-                    <img class='image_graph' align="middle" src='./img/exchangerate.png'/>
+                    <img class='image-graph' align="middle" src='./img/relevant_news.png'/>
                 </div>
                 <div class="col-md-6">
                     <span class="fa-stack fa-4x">
@@ -155,7 +155,7 @@
 
                     Time periods of note are the Global Financial Crisis that occurred roughly around 2008, and the Brexit referendum in the summer of 2016.
                   </p>
-                  <img class='image_graph' align="middle" src='./img/exchangerate.png'/>
+                  <img class='image-graph' align="middle" src='./img/exchangerate.png'/>
                 </div>
             </div>
         </div>
@@ -167,24 +167,29 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Time Series Analysis</h2>
-                    <h2>Baseline Model</h2>
+                </div>
+                <div class="col-lg-12 ">
+                    <p class='method-heading'>Baseline Model</p>
                     <h3 class="section-subheading text-muted">How well can we predict exchange rates without news sentiment analysis?</h3>
                 </div>
                 <div class="col-lg-12">
-                    <h3 class="section-heading">Exchange Rate Series</h3>
+                    <p class='method-subheading'>Exchange Rate Series</p>
                 </div>
                 <div class="col-lg-12">
-                    <h3 class="section-heading">Stationarity</h3>
+                    <p class='method-subheading'>Stationarity</p>
                 </div>
                 <div class="col-lg-12">
-                    <h3 class="section-heading">Differencing</h3>
+                    <p class='method-subheading'>Differencing</p>
                 </div>
                 <div class="col-lg-12">
-                    <h3 class="section-heading">Baseline Model</h3>
+                    <p class='method-subheading'>Baseline Model</p>
                 </div>
                 <div class="col-lg-12">
-                    <h3 class="section-heading">Regression Models</h3>
+                    <p class='method-subheading'>Regression Models</p>
                 </div>
+            </div>
+            <div class="container">
+                <a class="btn btn-xl view-button " href="./time_series_notebook.html">View the Code</a>
             </div>
         </div>
     </section>
@@ -194,39 +199,43 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Sentiment Analysis</h2>
-                    <h3 class="section-subheading text-muted">Sentiment analysis of news articles was performed using SentiWordNet, a public dictionary of words with sentiment scores, which has been trained via semi-supervised learning.</h3>
-                    <h2>SentiWordNet Methodology</h2>
-                    <h3>1. Selection of Relevant Articles</h3>
-                    <p>
-                      From all the articles scrapped using an API of The Gaurdian newspaper, we first filtered based on relevance to exchnage rates. This involve building a small dictionary of words and phrases which would indicate relevance to exchnage rate, and then search all the articles for the disctionary content. After some data exploration and visualisation, we determined the minimum number of words and phrases required for matching in order to class an article as being relevant (ensuring that a sufficient number of articles were classed as relevant weekly in order to generate weekly sentiment scores).
-                    </p>
-                    <h3>2. Tokenizing</h3>
-                    <h4>Splitting article body into sentences, then into words</h4>
-                    <p>
-                      SentinetWordNet provides a trained index of words and their corresponding positive, negtiave and netural sentiments (where the sum of these sentiments equal 1). To generate sentiments at an article level, we tokenised articles into words and used the mean average sentiment as the sentiment score for the entire article.
-                      A potential problem behind this method is that we may not obtain accurate sentiments for sections of the artivle which depend on more sophisticated understand of the natural language at a sentence or a phrase level. However, given the computation time required to use more sophisticated natural language techniques (such as Word2Vec or Doc2Vec) and the total number of articles to be considered across the time period, we proceed with the simpler model.
-                    </p>
-                    <h3>3. Filtering Neutrality</h3>
-                    <h4>Removing sentences with neutral sentiment from the original article</h4>
-                    <p>
-                      Given each article, we removed any sentences which had very high neutal sentiment scores. This ensured that our sentiment score generator would only focus on sentences which implied strong sentiment, resolving a previous problem of obtaining very low positive/negative sentiment scores from our model
-                    </p>
-                    <h3>4. Weekly sentiment</h3>
-                    <h4>Averaging article sentiments at a weekly level to obtain weekly sentiment scores.</h4>
-                    <p>
-                      Having developed a method to generate sentiment scores for a given article, we simply took the mean average of the articles at a given week to generate the sentiment scores associated to that week. For future work, it may be worth considering potential ways to weight different articles' sentiments based on factors such as their popularity.
-                    </p>
-                    <h3>5. Smoothing</h3>
-                    <h4>Reducing the weekly variance of sentiment scores with a rolling average</h4>
-                    <p>
-                      Having generated weekly sentiment scores, initially the high weekly variance did not allow any visible trends to be noticed. We resolved this by smoothing the weekly sentiment scores using a rolling average of a fixed number of preceding weeks. The number of preceding weeks use to smoothen the scentiment scores was chosen by maximising the correlation between the exchange rate and the sentiment score time series. The smoothened sentiment scores now shows visible correlation with the exchange rate, especially during times such as the Brexit Referendum, as can be seen below.
-                    </p>
                 </div>
-                <img class='image_graph' align="middle" src='./img/sentiment_exchange_correlation.png'/>
+                <div>
+                  <h3 class="section-subheading text-muted">Sentiment analysis of news articles was performed using SentiWordNet, a public dictionary of words with sentiment scores, which has been trained via semi-supervised learning.</h3>
+                  <h2>SentiWordNet Methodology</h2>
+                  <p class='method-subheading'>1. Selection of Relevant Articles</p>
+                  <p>
+                    From all the articles scrapped using an API of The Gaurdian newspaper, we first filtered based on relevance to exchnage rates. This involve building a small dictionary of words and phrases which would indicate relevance to exchnage rate, and then search all the articles for the disctionary content. After some data exploration and visualisation, we determined the minimum number of words and phrases required for matching in order to class an article as being relevant (ensuring that a sufficient number of articles were classed as relevant weekly in order to generate weekly sentiment scores).
+                  </p>
+                  <p class='method-subheading'>2. Tokenizing</p>
+                  <p class='method-subsubheading'>Splitting article body into sentences, then into words</p>
+                  <p>
+                    SentinetWordNet provides a trained index of words and their corresponding positive, negtiave and netural sentiments (where the sum of these sentiments equal 1). To generate sentiments at an article level, we tokenised articles into words and used the mean average sentiment as the sentiment score for the entire article.
+                    A potential problem behind this method is that we may not obtain accurate sentiments for sections of the artivle which depend on more sophisticated understand of the natural language at a sentence or a phrase level. However, given the computation time required to use more sophisticated natural language techniques (such as Word2Vec or Doc2Vec) and the total number of articles to be considered across the time period, we proceed with the simpler model.
+                  </p>
+                  <p class='method-subheading'>3. Filtering Neutrality</p>
+                  <p class='method-subsubheading'>Removing sentences with neutral sentiment from the original article</p>
+                  <p>
+                    Given each article, we removed any sentences which had very high neutal sentiment scores. This ensured that our sentiment score generator would only focus on sentences which implied strong sentiment, resolving a previous problem of obtaining very low positive/negative sentiment scores from our model
+                  </p>
+                  <p class='method-subheading'>4. Weekly sentiment</p>
+                  <p class='method-subsubheading'>Averaging article sentiments at a weekly level to obtain weekly sentiment scores.</p>
+                  <p>
+                    Having developed a method to generate sentiment scores for a given article, we simply took the mean average of the articles at a given week to generate the sentiment scores associated to that week. For future work, it may be worth considering potential ways to weight different articles' sentiments based on factors such as their popularity.
+                  </p>
+                  <p class='method-subheading'>5. Smoothing</p>
+                  <p class='method-subsubheading'>Reducing the weekly variance of sentiment scores with a rolling average</p>
+                  <p>
+                    Having generated weekly sentiment scores, initially the high weekly variance did not allow any visible trends to be noticed. We resolved this by smoothing the weekly sentiment scores using a rolling average of a fixed number of preceding weeks. The number of preceding weeks use to smoothen the scentiment scores was chosen by maximising the correlation between the exchange rate and the sentiment score time series. The smoothened sentiment scores now shows visible correlation with the exchange rate, especially during times such as the Brexit Referendum, as can be seen below.
+                  </p>
+                </div>
+                <div class="container">
+                  <img class='image-graph' align="middle" src='./img/sentiment_exchange_correlation.png'/>
+                  <div class="container">
+                      <a class="btn btn-xl view-button " href="./time_series_notebook.html">View the Code</a>
+                  </div>
+                </div>
             </div>
-        </div>
-        <div class="container">
-              <a class="page-scroll btn btn-xl" href="./time_series_notebook.html">View the Code</a>
         </div>
     </section>
 
@@ -249,6 +258,26 @@
                     <h2 class="section-heading">Conclusions</h2>
                 </div>
             </div>
+            <div class="container page-body-text">
+              In this project our goal was to predict future exchange rates at a weekly level. Using techniques from time series analysis and SentiWordNet, we developed models for exchange rate prediction which incorporated weekly sentiment scores from relevant news articles. As hypothesised, we found that incorporating sentiment scores into the time series model gives an improvement in prediction accuracy. A final comparison of our prediction model (incorporating sentiment scores) with a time series model not incorporating sentiment scores and a simple baseline model is highlighted in the table below.
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-subheading">Future Work</h2>
+                </div>
+            </div>
+            <div class="container page-body-text">
+              There are various areas we can investigate to further improve our model and develop this project:
+              <ol>
+                <li> Differencing the exchange rate time series data in forming the predictor matrix </li>
+                <li>Adding differenced sentiment scores</li>
+                <li>Elastic net regularisation</li>
+                <li>Vector autoregressive models</li>
+                <li>Investigate more sophisticated models such as AFIRMA which are commonly used for forecasting high frequency time series data</li>
+                <li>Incorporate sentiment scores from a wider range of news sources outside the Guardian</li>
+                <li>Investigate more sophisticated natural language processing techniques such as Word2Vec or Doc2Vec which can consider articles at a sentence level rather than a word level</li>
+              </ol>
+            </div>
         </div>
     </section>
 
@@ -259,6 +288,12 @@
                     <h2 class="section-heading">References</h2>
                 </div>
             </div>
+            <ol>
+              <li class='references'> SENTIWORDNET: A Publicly Available Lexical Resource for Opinion Mining. Andrea Esuli and Fabrizio Sebastian </li>
+              <li class='references'> Time Series: Economic Forecasting. James Stock </li>
+              <li class='references'> Exchange rate modelling using news articles and economic data. D. Zhang, S.J. Simoff and J. Debenham </li>
+              <li class='references'> Sentiment analysis based on clustering: a framework in improving accuracy and recognizing neutral opinions. Gang Li and Fei Liu </li>
+            </ol>
         </div>
     </section>
 

@@ -20,14 +20,56 @@
   text-align: center;
 }
 
-.image_graph {
-  width: 50rem;
+.image-graph {
+  width: 60rem;
+  display: block;
+  margin: auto;
+  padding: 2em;
 }
 
-.navbar-custom .nav li a, .navbar-custom .navbar-toggle .dropdown-option {
-  /*color: red;*/
+.container .view-button {
+  display: block;
+  margin: auto;
+  width: 15em;
+}
+
+.dropdown-menu .dropdown-option {
+  font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  text-transform: uppercase;
+  font-size: 1em;
+  font-weight: 400;
+  padding: 5px;
+  letter-spacing: 1px;
+  display: block;
+  clear: both;
 }
 
 .btn-primary {
   margin-top: 0.6em;
+}
+
+.references {
+  font-size: 1.2em;
+  font-style: italic;
+  letter-spacing: 1px;
+  line-height: 2em
+}
+
+.page-body-text {
+  font-size: 1.2em;
+  line-height: 2.5em
+}
+
+.method-subheading {
+  font-size: 1.5em;
+}
+
+.method-subsubheading {
+  font-size: 1.2em;
+  font-style: italic;
+}
+
+.method-heading {
+  font-size: 1.5em;
+  font-weight: bolder;
 }
