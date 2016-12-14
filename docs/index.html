@@ -78,7 +78,8 @@
                           <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-option" href="./financial_data_exploration.html">Data</a></li>
+                          <li><a class="dropdown-option" href="./data_collection.html">Data Collection</a></li>
+                          <li><a class="dropdown-option" href="./financial_data_exploration.html">Data Exploration</a></li>
                           <li><a class="dropdown-option" href="./sentiment_analysis.html">Sentiment</a></li>
                           <li><a class="dropdown-option" href="./time_series.html">Time Series</a></li>
                           <li><a class="dropdown-option" href="./forecasting.html">Forecasting</a></li>
@@ -143,7 +144,7 @@
                     <p class="section-subheading text-muted">Business news data was collected from The Guardian, a British newspaper. The top 30 news articles each week in the business section in the period 2010-2016 was collected using the Guardian API and saved to a csv file. The csv was saved to <a href='https://s3.amazonaws.com/cs109data/articles_db.csv'>AWS S3</a></p>
                     <p class="section-subheading text-muted">The articles were then filtered for relevance by counting the occurence of only words related to the economic health (from a predefined list of words grounded in economic theory)
                     </p>
-                    <img class='image-graph' align="middle" src='./img/relevant_news.png'/>
+                    <img class='image-graph senti-score' align="middle" src='./img/relevant_news.png'/>
                 </div>
                 <div class="col-md-6">
                     <span class="fa-stack fa-4x">
@@ -172,47 +173,55 @@
                     <h2 class="section-heading">Time Series Analysis</h2>
                 </div>
                 <div class="col-lg-12 ">
-                    <p class='method-heading'>Baseline Model</p>
-                    <h3 class="section-subheading text-muted">How well can we predict exchange rates without news sentiment analysis?</h3>
-                    <p class='method-subheading'>Exchange Rate Series</p>
-                    <p>
-                      Let's take a look again at the exchange rate plot, zooming in on times of interest
-                    </p>
-                    <img class='image-graph' align="middle" src='./img/full_exchange.png'/>
-                    <p>
-                      First, take a look at the global financial crisis, and event that preciptated a drastic change in the UK-US exchange rate
-                    </p>
-                    <img class='image-graph' align="middle" src='./img/fincrisis.png'/>
-                    <p>
-                      Next, take a look at the at the time period around the Brexit referendum, which saw the value of the GBP at a local minimum relative to a 25 year time horizon
-                    </p>
-                    <img class='image-graph' align="middle" src='./img/brexit.png'/>
-                    <p class='method-subheading'>Stationarity</p>
-                    <p>
-                      Taking first differences, we see that aside from a time of extreme variation around the global financial crisis,
-                        data is reasonably stationary with mean zero and relatively stable variance outside of the 2008-2010 time frame.
-                    </p>
-                    <img class='image-graph' align="middle" src='./img/firstdiff.png'/>
-                    <p class='method-subheading'>Autocorrelation</p>
-                    <p>
-                      Let's first start by taking a deeper dive into the first lag of the first-differenced
-                      exchange rate as this should give us some information as to whether or not a simple
-                      AR(1) process can adequately model our data.
-                    </p>
-                    <img class='image-graph' align="middle" src='./img/joint.png'/>
-                    <p>
-                      The first difference is almost certainly zero, with both axes having data appearing to be drawn
-                      from a roughly normal distribution with mean zero.
-                    </p>
-                    <p>
-                      Let's now take a look at further lags (lags 1 through 40) to see if there's any other information thats's available in prior lags.
-                    </p>
-                    <img class='image-graph' align="middle" src='./img/autocorrelation.png'/>
-                    <p>
-                      The lags appear to bounce around zero--an AR(1) process might not be able to glean all that
-                      much from the underlying data.
-                    </p>
-                    <p class='method-subheading'>Baseline Model</p>
+                  <p class='method-heading'>Baseline Model</p>
+                  <h3 class="section-subheading text-muted">How well can we predict exchange rates without news sentiment analysis?</h3>
+                  <p class='method-subheading'>Exchange Rate Series</p>
+                  <p>
+                    Let's take a look again at the exchange rate plot, zooming in on times of interest
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/full_exchange.png'/>
+                  <p>
+                    First, take a look at the global financial crisis, and event that preciptated a drastic change in the UK-US exchange rate
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/fincrisis.png'/>
+                  <p>
+                    Next, take a look at the at the time period around the Brexit referendum, which saw the value of the GBP at a local minimum relative to a 25 year time horizon
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/brexit.png'/>
+                  <p class='method-subheading'>Stationarity</p>
+                  <p>
+                    Taking first differences, we see that aside from a time of extreme variation around the global financial crisis,
+                      data is reasonably stationary with mean zero and relatively stable variance outside of the 2008-2010 time frame.
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/firstdiff.png'/>
+                  <p class='method-subheading'>Autocorrelation</p>
+                  <p>
+                    Let's first start by taking a deeper dive into the first lag of the first-differenced
+                    exchange rate as this should give us some information as to whether or not a simple
+                    AR(1) process can adequately model our data.
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/joint.png'/>
+                  <p>
+                    The first difference is almost certainly zero, with both axes having data appearing to be drawn
+                    from a roughly normal distribution with mean zero.
+                  </p>
+                  <p>
+                    Let's now take a look at further lags (lags 1 through 40) to see if there's any other information thats's available in prior lags.
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/autocorrelation.png'/>
+                  <p>
+                    The lags appear to bounce around zero--an AR(1) process might not be able to glean all that
+                    much from the underlying data.
+                  </p>
+                  <p class='method-heading'>Lasso regression model</p>
+                  <p>
+                    An alternative time series modelling approach was considered involving using linear regression techniques. Matrices of predictors were generated with the lagged exchange rate data and this was used with Lasso regression to determine the coefficients of the lags. The data was of the form:
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/formula.png'/>
+                  <p>
+                    Cross validated Lasso regression was used to optimise the hyperparameters. Visualisation of the coefficient values shows that beyond the first lag, the subsequent lags have little predictive value. Lasso regression squashes the predictive power of some coefficients in favour of others, and in this case has put all the predictive power in the first lag.
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/lasso_coeffs.png'/>
             </div>
         </div>
         <div class="container">
@@ -228,7 +237,7 @@
                 </div>
                 <div>
                   <h3 class="section-subheading text-muted">Sentiment analysis of news articles was performed using SentiWordNet, a public dictionary of words with sentiment scores, which has been trained via semi-supervised learning.</h3>
-                  <h2>SentiWordNet Methodology</h2>
+                  <p class='method-heading'>SentiWordNet Methodology</p>
                   <p class='method-subheading'>1. Selection of Relevant Articles</p>
                   <p>
                     From all the articles scrapped using an API of The Gaurdian newspaper, we first filtered based on relevance to exchnage rates. This involve building a small dictionary of words and phrases which would indicate relevance to exchnage rate, and then search all the articles for the disctionary content. After some data exploration and visualisation, we determined the minimum number of words and phrases required for matching in order to class an article as being relevant (ensuring that a sufficient number of articles were classed as relevant weekly in order to generate weekly sentiment scores).
@@ -273,6 +282,13 @@
                     <h2 class="section-heading">Forecasting</h2>
                     <h3 class="section-subheading text-muted">The time series models were used to generate forecasts of the exchange rate for different forecast horizons</h3>
                 </div>
+                <div class="col-lg-12" >
+                  <p>Exchange rate forecasts were generated in an incremenetal process:</p>
+                  <p> 1. The lags of time step t were used to generate a prediction for time step t+1 </p>
+                  <p> 2. This was used as the best estimate of the exchange rate at time t+1 and used to predict the value at time t+2 </p>
+                  <p> This incremental forecasting process was continued up to the desired forecasting horizon </p>
+                </div>
+                <img class='image-graph' align="middle" src='./img/20_week_forecast.png'/>
             </div>
         </div>
         <div class="container">

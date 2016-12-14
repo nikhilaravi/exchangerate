@@ -21,10 +21,18 @@
 }
 
 .image-graph {
-  width: 60rem;
+  width: 62rem;
   display: block;
   margin: auto;
-  padding: 2em;
+  padding: 15px;
+}
+
+.senti-score {
+  width: 40em;
+  display: block;
+  margin: auto;
+  margin-top: 1.5em;
+  padding: 15px;
 }
 
 .container .view-button {
