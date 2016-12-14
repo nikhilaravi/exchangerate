@@ -213,6 +213,31 @@
                     The lags appear to bounce around zero--an AR(1) process might not be able to glean all that
                     much from the underlying data.
                   </p>
+                  <p class='method-heading'>Univariate ARMA models</p>
+                  <p>
+                    Although we saw from the autocorrelation plot investigation above that AR processes will likely perform trivially,
+                    there's still a need to create a well-developed baseline model against which we will compare our sentiment score-augmented
+                    model.  We select an AR(6) process as the sixth lag is somewhat significant in both the ACF and PACF plots below.
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/acf.png'/>
+                  <p class='method-subheading'>AR model</p>
+                  <p>
+                    As mentioned above, we fit an AR(6) process to the data, which appears to perform quite well (although
+                    we should remember that exchange rates do not vary all too much week over week).
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/AR1.png'/>
+                  <p class='method-subheading'>MA model</p>
+                  <p>
+                    We also considered a standalone moving average model (using two moving average terms) for the sake of exploration.
+                    This appeared to attenuate the magnitude of our predictions and lead to a poor model result.
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/MA.png'/>
+                  <p class='method-subheading'>ARMA model</p>
+                  <p>
+                    Our final baseline model was an ARMA (6,5) process that yielded the lowest SSR on the data, with a plot of the prediction
+                    overlayed on the original data below.
+                  </p>
+                  <img class='image-graph' align="middle" src='./img/ARMA.png'/>
                   <p class='method-heading'>Lasso regression model</p>
                   <p>
                     An alternative time series modelling approach was considered involving using linear regression techniques. Matrices of predictors were generated with the lagged exchange rate data and this was used with Lasso regression to determine the coefficients of the lags. The data was of the form:
