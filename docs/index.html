@@ -79,9 +79,9 @@
                         </button>
                         <ul class="dropdown-menu">
                           <li><a class="dropdown-option" href="./financial_data_exploration.html">Data</a></li>
-                          <li><a class="dropdown-option" href="./Website_Content_Sentiment_Analysis.html">Sentiment</a></li>
-                          <li><a class="dropdown-option" href="./time_series_notebook.html">Time Series</a></li>
-                          <li><a class="dropdown-option" href="./time_series_notebook.html">Forecasting</a></li>
+                          <li><a class="dropdown-option" href="./sentiment_analysis.html">Sentiment</a></li>
+                          <li><a class="dropdown-option" href="./time_series.html">Time Series</a></li>
+                          <li><a class="dropdown-option" href="./forecasting.html">Forecasting</a></li>
                         </ul>
                       </div>
                     </li>
@@ -140,8 +140,8 @@
                         <i class="fa fa-newspaper-o fa-stack-1x fa-inverse"></i>
                     </span>
                     <h4 class="service-heading">News Data</h4>
-                    <p class="section-subheading text-muted">News data was collected from The Guardian, a British newspaper. The top 30 news articles each week in the period 2010-2016 was collected using the Guardian API and saved to a csv file which was saved to AWS S3</p>
-                    <p class="section-subheading text-muted">The articles were then filtered for only business news and only articles which contained words which relevant determined by the presences of words related to the economic health
+                    <p class="section-subheading text-muted">Business news data was collected from The Guardian, a British newspaper. The top 30 news articles each week in the business section in the period 2010-2016 was collected using the Guardian API and saved to a csv file. The csv was saved to <a href='https://s3.amazonaws.com/cs109data/articles_db.csv'>AWS S3</a></p>
+                    <p class="section-subheading text-muted">The articles were then filtered for relevance by counting the occurence of only words related to the economic health (from a predefined list of words grounded in economic theory)
                     </p>
                     <img class='image-graph' align="middle" src='./img/relevant_news.png'/>
                 </div>
@@ -158,6 +158,9 @@
                   <img class='image-graph' align="middle" src='./img/exchangerate.png'/>
                 </div>
             </div>
+        </div>
+        <div class="container">
+          <a class="btn btn-xl view-button " href="./financial_data_exploration.html">View the Code</a>
         </div>
     </section>
 
@@ -210,11 +213,10 @@
                       much from the underlying data.
                     </p>
                     <p class='method-subheading'>Baseline Model</p>
-
             </div>
         </div>
         <div class="container">
-            <a class="btn btn-xl view-button " href="./time_series_notebook.html">View the Code</a>
+            <a class="btn btn-xl view-button " href="./time_series.html">View the Code</a>
         </div>
     </section>
 
@@ -255,11 +257,11 @@
                 </div>
                 <div class="container">
                   <img class='image-graph' align="middle" src='./img/sentiment_exchange_correlation.png'/>
-                  <div class="container">
-                      <a class="btn btn-xl view-button " href="./time_series_notebook.html">View the Code</a>
-                  </div>
                 </div>
             </div>
+        </div>
+        <div class="container">
+          <a class="btn btn-xl view-button " href="./sentiment_analysis.html">View the Code</a>
         </div>
     </section>
 
@@ -272,6 +274,9 @@
                     <h3 class="section-subheading text-muted">The time series models were used to generate forecasts of the exchange rate for different forecast horizons</h3>
                 </div>
             </div>
+        </div>
+        <div class="container">
+          <a class="btn btn-xl view-button " href="./forecasting.html">View the Code</a>
         </div>
     </section>
 

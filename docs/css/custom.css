@@ -33,23 +33,8 @@
   width: 15em;
 }
 
-.dropdown-menu .dropdown-option {
-  font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
-  text-transform: uppercase;
-  font-size: 1em;
-  font-weight: 400;
-  padding: 5px;
-  letter-spacing: 1px;
-  display: block;
-  clear: both;
-}
-
 .dropdown-toggle {
   margin-left: 10px;
-}
-
-.btn-primary {
-  margin-top: 0.6em;
 }
 
 .references {
@@ -79,4 +64,19 @@
 }
 .bottom-one {
   margin-bottom: 1cm;
+}
+
+.btn-primary {
+  margin-top: 0.6em;
+}
+.navbar-custom .nav li .dropdown-menu .dropdown-option {
+  font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  text-transform: uppercase;
+  font-size: 1em;
+  font-weight: 400;
+  padding: 5px;
+  letter-spacing: 1px;
+  display: block;
+  clear: both;
+  color: grey;
 }
