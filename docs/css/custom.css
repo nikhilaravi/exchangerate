@@ -44,6 +44,10 @@
   clear: both;
 }
 
+.dropdown-toggle {
+  margin-left: 10px;
+}
+
 .btn-primary {
   margin-top: 0.6em;
 }
