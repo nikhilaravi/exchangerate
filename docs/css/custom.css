@@ -30,9 +30,11 @@
 .senti-score {
   width: 40em;
   display: block;
-  margin: auto;
-  margin-top: 1.5em;
   padding: 15px;
+}
+
+.exchange_rate {
+  width: 57rem;
 }
 
 .container .view-button {
