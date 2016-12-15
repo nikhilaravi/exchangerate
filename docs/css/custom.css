@@ -99,9 +99,26 @@
     float: right !important;
     margin-right:50px
   }
+  section {
+    padding: 60px 0;
+  }
 }
 @media (min-width: 1200px) {
   .container {
     width: 1050px;
   }
+}
+
+.equation {
+  width: 50em;
+  display: block;
+  margin: auto;
+  padding: 15px;
+}
+
+.forecast {
+  width: 50em;
+  display: block;
+  margin: auto;
+  padding: 15px;
 }

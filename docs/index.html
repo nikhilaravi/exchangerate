@@ -61,10 +61,10 @@
                         <a class="page-scroll" href="#portfolio">Data</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#sentiment">Sentiment Analysis</a>
+                        <a class="page-scroll" href="#sentiment">Sentiment</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#time">Time Series Models</a>
+                        <a class="page-scroll" href="#time">Time Series</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#forecasting">Forecasting</a>
@@ -197,7 +197,7 @@
                   <p class='method-heading'>SentiWordNet Methodology</p>
                   <p class='method-subheading'>1. Selection of Relevant Articles</p>
                   <p>
-                    From all the articles scrapped using an API of The Gaurdian newspaper, we first filtered based on relevance to exchange rates. This firstly involved building a small dictionary of words and phrases which would indicate relevance to exchnage rates. Then the contents of this dictionary was searched for in all the articles. We decided to filter the articles based on relevance to exchange rates, by considering the number of terms (our relevance threshold) from our exchange rate dictionary which were found in the articles. We visualised the average number of relevant articles weekly under different relevance thresholds (where a higher threshold results in a lower number of articles). After considering different relevance threshold values, we determined the optimal threshold to be 3 words. This was decided by ensuring that a sufficient number of articles were classed as relevant weekly in order to generate weekly sentiment scores, whilst also ensuring irrelevant articles were excluded. 
+                    From all the articles scrapped using an API of The Gaurdian newspaper, we first filtered based on relevance to exchange rates. This firstly involved building a small dictionary of words and phrases which would indicate relevance to exchnage rates. Then the contents of this dictionary was searched for in all the articles. We decided to filter the articles based on relevance to exchange rates, by considering the number of terms (our relevance threshold) from our exchange rate dictionary which were found in the articles. We visualised the average number of relevant articles weekly under different relevance thresholds (where a higher threshold results in a lower number of articles). After considering different relevance threshold values, we determined the optimal threshold to be 3 words. This was decided by ensuring that a sufficient number of articles were classed as relevant weekly in order to generate weekly sentiment scores, whilst also ensuring irrelevant articles were excluded.
                   </p>
                   <p class='method-subheading'>2. Tokenizing</p>
                   <p class='method-subsubheading'>Splitting article body into sentences, then into words</p>
@@ -311,7 +311,7 @@
                   <p class='method-subheading'>1. Create a matrix of lagged predictors </p>
                   <p>For further improvements from the baseline model, several other models were considered including regression models with L1 and L2 regularisation.  This is equivalent to an autoregressive model and would enable us to examine the coefficients assigned to each lag.
                   </p>
-                  <img class='image-graph' align="middle" src='./img/formula.png'/>
+                  <img class='equation' align="middle" src='./img/formula.png'/>
                   <p>
                   To determine the number of lags used in our model, we split the given data into training and test sets and analysed the cross validation scores. This is gave 20 lags as being the optimal choice, as shown in the matrix above.
                   </p>
@@ -340,7 +340,7 @@
 
                   <p class='method-heading'>Multivariate Lasso regression</p>
                   <p>A predictor matrix of containing 20 lags of preceeding exchange rate, 20 lags of preceding positive sentiment scores, and 20 lags of preceding negative sentiment scores was constructed of the form</p>
-                  <img class='image-graph' align="middle" src='./img/matrix_of_lags.png'/>
+                  <img class='equation' align="middle" src='./img/matrix_of_lags.png'/>
                   <p>
                   As highlighted above, the first 20 columns of the matrix correspond to the exchange rate time series, the next 20 columns of the matrix correspond to the positive sentiment scores, and the last 20 columns of the matrix correspond to the negative sentiment scores.
                   </p>
@@ -371,12 +371,18 @@
                 </div>
                 <div>
                   <p class='method-heading'>Forecast Methodology</p>
-                  <p>Exchange rate forecasts were generated in an incremenetal process:</p>
+                  <p>Exchange rate forecasts were generated in an incremental process:</p>
                   <p> 1. The lags of time step t were used to generate a prediction for time step t+1 </p>
-                  <p> 2. This was used as the best estimate of the exchange rate at time t+1 and used to predict the value at time t+2 </p>
-                  <p> This incremental forecasting process was continued up to the desired forecasting horizon </p>
+                  <p> 2. This was used as the best estimate of the exchange rate at time t+1 and used as one of the predictors to predict the value of the exchange rate at time t+2 </p>
+                  <p> This incremental forecasting process was continued up to the desired forecasting horizon. It is important to note that at each forecasting step, the error increases significantly and the confidence bounds after even 2 time steps forecasts are large.
+                  The plot below shows 20 week forecasts generated from each time point. The forecasts are shown as the coloured lines.
+                  </p>
                 </div>
-                <img class='image-graph' align="middle" src='./img/20_week_forecast.png'/>
+                <img class='forecast' align="middle" src='./img/20_week_forecast.png'/>
+                <p>The forecasts are seen to have very little predictive accuracy beyond predicting 1-2 weeks in the future. This result is unsurprising. Given the inherent unpredictable nature of exchange rates and their sensitivity to changes in the world, it would be unrealistic to expect that the exchange rate could be forecasted several weeks or months into the future.
+
+                Looking more closely at the direction of prediction, during the sharp fall in exchange rates during the financial crisis (late 2008), the predictions are in the positive direction, and it takes several months before the direction of prediction aligns with the local direction of movement. Following the financial crisis, the predictions all show the value decreasing from the value at the local time point. This analysis shows that long horizon forecasts of the exchange rate are difficult and most probably inaccurate. 
+                </p>
             </div>
         </div>
         <div class="container">
