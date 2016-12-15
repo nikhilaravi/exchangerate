@@ -403,7 +403,13 @@
                 </div>
             </div>
             <p class="container page-body-text">
-              In this project our goal was to predict future exchange rates at a weekly level. Using techniques from time series analysis and SentiWordNet, we developed models for exchange rate prediction which incorporated weekly sentiment scores from relevant news articles. As hypothesised, we found that incorporating sentiment scores into the time series model gives an improvement in prediction accuracy. A final comparison of our prediction model (incorporating sentiment scores) with a time series model not incorporating sentiment scores and a simple baseline model is highlighted in the table below.
+              In this project our goal was to predict future exchange rates at a weekly level. Using techniques from time series analysis and SentiWordNet, we developed models for exchange rate prediction which incorporated weekly sentiment scores from relevant news articles. We found that the addition of sentiment scores into the model does not necessarily result in an improvement in prediction accuracy, contrary to our initial hypothesis.
+            </p>
+            <p>
+              This is actually consistent with existing research literature (see [3]), where it is found that news sentiments are useful in indicating the direction of exchange rate movements but ineffective in predicting the magnitude of the exchange rate movements. Therefore, incorporating the sentiment scores through a large predictor space does not necessarily lead to improved predictive accuracy.
+            </p>
+            <p>
+              This project has highlighted the intrinsic difficulties of predicting exchange rates using news sentiments. As the exchange rate market is so liquid and fast-paced, any impact from extraneous events is reflected immediately on the rates, often much sooner than when an article is written about these events. Perhaps for future work it may be more fruitful to consider sentiment of news sources such as Twitter where news is reported much faster.
             </p>
             <div class="row">
                 <div class="col-lg-12 text-center">
