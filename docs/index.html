@@ -182,12 +182,12 @@
                   <p class='method-subsubheading'>Splitting article body into sentences, then into words</p>
                   <p>
                     SentinetWordNet provides a trained index of words and their corresponding positive, negtiave and netural sentiments (where the sum of these sentiments equal 1). To generate sentiments at an article level, we tokenised articles into words and used the mean average sentiment as the sentiment score for the entire article.
-                    A potential problem behind this method is that we may not obtain accurate sentiments for sections of the artivle which depend on more sophisticated understand of the natural language at a sentence or a phrase level. However, given the computation time required to use more sophisticated natural language techniques (such as Word2Vec or Doc2Vec) and the total number of articles to be considered across the time period, we proceed with the simpler model.
+                    A potential problem behind this method is that we may not obtain accurate sentiments for sections of the article which depend on more sophisticated understanding of the natural language at a phrase or sentence level. However, given the computation time required to use more sophisticated natural language processing techniques (such as Word2Vec or Doc2Vec) and the total number of articles to be considered across the time period, we proceed with the simpler model.
                   </p>
                   <p class='method-subheading'>3. Filtering Neutrality</p>
                   <p class='method-subsubheading'>Removing sentences with neutral sentiment from the original article</p>
                   <p>
-                    Given each article, we removed any sentences which had very high neutal sentiment scores. This ensured that our sentiment score generator would only focus on sentences which implied strong sentiment, resolving a previous problem of obtaining very low positive/negative sentiment scores from our model
+                    Given each article, we removed any sentences which had very high neutal sentiment scores. This ensured that our sentiment score generator would only focus on sentences which implied strong sentiment, resolving a previous problem of obtaining very low positive/negative sentiment scores from our model. We also investigated what neutal sentiment scores would be the most effective for removing neutral sentiment sentences. This was done by considering different neutal sentiment score thresholds for sentence removals. For each of these thresholds, we calculated the sentiment scores of the articles (with neutral sentences removed) at a weekly level. Then this time series of positive and negative sentiment scores was compared with the exchange rate time series to obtain correlation values. We choose the optimal neutal sentiment score threshold by maximising the magnitude of correlation values. This gave an optimal neutal sentiment score threshold of 0.9.
                   </p>
                   <p class='method-subheading'>4. Weekly sentiment</p>
                   <p class='method-subsubheading'>Averaging article sentiments at a weekly level to obtain weekly sentiment scores.</p>
@@ -197,7 +197,7 @@
                   <p class='method-subheading'>5. Smoothing</p>
                   <p class='method-subsubheading'>Reducing the weekly variance of sentiment scores with a rolling average</p>
                   <p>
-                    Having generated weekly sentiment scores, initially the high weekly variance did not allow any visible trends to be noticed. We resolved this by smoothing the weekly sentiment scores using a rolling average of a fixed number of preceding weeks. The number of preceding weeks use to smoothen the scentiment scores was chosen by maximising the correlation between the exchange rate and the sentiment score time series. The smoothened sentiment scores now shows visible correlation with the exchange rate, especially during times such as the Brexit Referendum, as can be seen below.
+                    Having generated weekly sentiment scores, initially the high weekly variance did not allow any visible trends to be noticed. We resolved this by smoothing the weekly sentiment scores using a rolling average of a fixed number of preceding weeks. The optimal number of preceding weeks used to smoothen the scentiment scores was chosen by maximising the correlation between the exchange rate and the sentiment score time series. The smoothened sentiment scores now shows visible correlation with the exchange rate, especially during times such as the Brexit Referendum, as can be seen below.
                   </p>
                 </div>
                 <div class="container">
