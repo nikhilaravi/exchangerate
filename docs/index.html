@@ -176,7 +176,10 @@
                   <p class='method-heading'>SentiWordNet Methodology</p>
                   <p class='method-subheading'>1. Selection of Relevant Articles</p>
                   <p>
-                    From all the articles scrapped using an API of The Gaurdian newspaper, we first filtered based on relevance to exchange rates. This firstly involved building a small dictionary of words and phrases which would indicate relevance to exchnage rates. Then the contents of this dictionary was searched for in all the articles. We decided to filter the articles based on relevance to exchange rates, by considering the number of terms (our relevance threshold) from our exchange rate dictionary which were found in the articles. We visualised the average number of relevant articles weekly under different relevance thresholds (where a higher threshold results in a lower number of articles). After considering different relevance threshold values, we determined the optimal threshold to be 3 words. This was decided by ensuring that a sufficient number of articles were classed as relevant weekly in order to generate weekly sentiment scores, whilst also ensuring irrelevant articles were excluded.
+                    From all the articles scrapped using an API of The Gaurdian newspaper, we first filtered based on relevance to exchange rates. This firstly involved building a small dictionary of words and phrases which would indicate relevance to exchnage rates. Then the contents of this dictionary was searched for in all the articles. We decided to filter the articles based on relevance to exchange rates, by considering the number of terms (our relevance threshold) from our exchange rate dictionary which were found in the articles. We visualised the average number of relevant articles weekly under different relevance thresholds (where a higher threshold results in a lower number of articles). After considering different relevance threshold values, we determined the optimal threshold to be 3 words. This was decided by ensuring that a sufficient number of articles were classed as relevant weekly in order to generate weekly sentiment scores (such that no week had zero relevant articles), whilst also ensuring an excessive number of irrelevant articles were excluded.
+                    <div class="container">
+                      <img class='image-graph' align="middle" src='./img/relevant_article_thresholds.png'/>
+                    </div>
                   </p>
                   <p class='method-subheading'>2. Tokenizing</p>
                   <p class='method-subsubheading'>Splitting article body into sentences, then into words</p>
@@ -313,7 +316,7 @@
                   </p>
                   <p class='method-subheading'>4c. Residual errors of the model</p>
                   <p>We can analyse the distribution of the residual errors of the model</p>
-                  <img class='image-graph' align="middle" src='./img/lassoresid.png'/>
+                  <img class='image-graph' align="middle" src='./img/lasso_residuals.png'/>
                   <p>The residual errors have a distribution with mean approximately zero. This means on average our prediction model does not under or overestimate the actual values.</p>
 
 
