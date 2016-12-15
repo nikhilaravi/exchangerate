@@ -28,13 +28,13 @@
 }
 
 .senti-score {
-  width: 40em;
+  width: 35em;
   display: block;
   padding: 15px;
 }
 
 .exchange_rate {
-  width: 57rem;
+  width: 50rem;
 }
 
 .container .view-button {
@@ -56,7 +56,7 @@
 
 .page-body-text {
   font-size: 1.2em;
-  line-height: 2.5em
+  /*line-height: 2em*/
 }
 
 .method-subheading {
@@ -91,12 +91,17 @@
   color: grey;
 }
 
-/*@media (min-width:768px) {
-  header .intro-text .intro-heading {
+@media (min-width:768px) {
+  /*header .intro-text .intro-heading {
     font-size: 4em
-  }
+  }*/
   .navbar-right {
     float: right !important;
-    margin-right:156px
+    margin-right:50px
   }
-}*/
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1050px;
+  }
+}

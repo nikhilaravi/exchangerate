@@ -109,18 +109,39 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Overview</h2>
-                    <p class="section-subheading page-body-text">
-                      Exchange rates are important indicators of real and perceived economic performance.
-                      Fluctuations in a country's exchange rate directly reflect changes in economic confidence.
-                      This was particularly salient during the recent global financial crisis and Brexit referendum.
-                      Furthermore, foreign exchange is one of the most liquid assets traded in the global financial markets.
-                      This means that any relevant news or development about a country's economy is very quickly reflected in the exchange rate movements, and secondly this also increases the role of trading speculation on affecting the short-term fluctuations of an exchange rate.
-                      These proporties of exchange rates mean that prediction of exchange rates is very difficult in practice.
-                    </p>
-                    <p class='page-body-text'>
-                      In this project, we aim to predict future exchange rates at a weekly level. We apply techniques from time series analysis and natural language processing to identity trends in the exchange rate for prediction. We hypothesise that changes in business news sentiment can be used to predict movements in the exchange rate, leading to more accurate predictors when combined with predictors from time series analysis. Our goal is to build a model that incorporates sentiment analysis of news articles sourced from The Guardian in order to predict US-UK exchange rates in the 2000-2016 time frame.
-                    </p>
                 </div>
+                <p class="method-subheading"> Motivation </p>
+                <p class="page-body-text">
+                  Exchange rates are important indicators of real and perceived economic performance.
+                  Fluctuations in a country's exchange rate directly reflect changes in economic confidence.
+                  This was particularly salient during the recent global financial crisis and Brexit referendum.
+                  Furthermore, foreign exchange is one of the most liquid assets traded in global financial markets.
+                  This means that any relevant news or development about a country's economy is very quickly reflected in the exchange rate movements, and secondly this also increases the role of trading speculation on affecting the short-term fluctuations of an exchange rate.
+                  These properties of exchange rates mean they are very difficult to predict in practice
+                </p>
+                <p class="method-subheading"> Objectives </p>
+                <p class='page-body-text'>
+                  In this project, we aim to predict future exchange rates at a weekly level. We apply techniques from time series analysis and natural language processing to identify trends in the exchange rate for prediction. We hypothesise that changes in business news sentiment can be used to predict movements in the exchange rate, leading to more accurate predictors when combined with predictors from time series analysis.
+
+                  Our goal is to build a time series prediction model that incorporates sentiment scores of news articles. We decided to focus on business news as we postulate that news in this segment is most closely related to and affected by exchange rates. Other news segments we considered were politics and world news, however we decided to focus initally on business related news.
+
+                  Through this project we sought to answer a few key questions:
+                  <ul class='page-body-text'>
+                    <li>How accurately can next week's exchange rate be predicted using only past values of exchange rate? What form would such a time series predictive model take?</li>
+                    <li>Can a sentiment "signal" be extracted from news articles over a period of time and what would this signal look like?</li>
+                    <li>Can the sentiment signal be incorporated into the time series predictive model, and if so does it improve the predictive accuracy of the model?</li>
+                  </ul>
+                </p>
+                <p class="method-subheading"> Approach </p>
+                <p class='page-body-text'>
+                  We began our study by collecting UK/US exchange rate data and business news articles in the period 2010-2016.
+
+                  The subsequent analysis involved two components. The first was a univariate time series predictive model of the exchange rate data. The second was a sentiment analysis algorithm to determine the weekly business sentiment score.
+
+                  The results of this analyis formed the creation of a multivariate time series model incorporating sentiment scores.
+
+                  The predictive accuracies of the models were compared the models were used to generate a one week forecast of the exchange rate.
+                </p>
             </div>
         </div>
     </section>
@@ -138,25 +159,25 @@
                 <div class="col-md-6">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                        <i class="fa fa-newspaper-o fa-stack-1x fa-inverse"></i>
+                        <i class="fa fa-money fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">News Data</h4>
-                    <p class="section-subheading text-muted">Business news data was collected from The Guardian, a British newspaper. The top 30 news articles each week in the business section in the period 2010-2016 was collected using the Guardian API and saved to a csv file. The csv was saved to <a href='https://s3.amazonaws.com/cs109data/articles_db.csv'>AWS S3</a></p>
-                    <p class="section-subheading text-muted">The articles were then filtered for relevance by counting the occurence of only words related to the economic health (from a predefined list of words grounded in economic theory)
-                    </p>
-                    <img class='image-graph senti-score' align="middle" src='./img/relevant_news.png'/>
+                    <h4 class="service-heading">Economic Indicator Data</h4>
+                    <p class="text-muted">Daily data on the UK-US exchange rate at market closing was obtained from the Bank of England's Statistical Interactive Database for the January 2000 to October 2016 time frame. We performed a series of exploratory analyses on the data to determine the frequency at which the data is needed in order for important movements in the exchange rate to be captured (such as the financial crisis and brexit). It was determined that weekly frequency was sufficient and the data was aggregated to the weekly level. This data is plotted below:
+                  </p>
+                  <img class='image-graph exchange_rate' align="middle" src='./img/exchangerate.png'/>
+                  <p>Time periods of note are the Global Financial Crisis that occurred roughly around 2008, and the Brexit referendum in the summer of 2016.</p>
                 </div>
                 <div class="col-md-6">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                        <i class="fa fa-money fa-stack-1x fa-inverse"></i>
+                        <i class="fa fa-newspaper-o fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Economic Indicator Data</h4>
-                    <p class="text-muted">Daily data on the UK-US exchange rate at market closing was obtained from the Bank of England's Statistical Interactive Database for the January 2000 to October 2016 time frame. Data was aggregated to the weekly level to align with our sentiment analyses and news article data. This data is plotted below:
-
-                    Time periods of note are the Global Financial Crisis that occurred roughly around 2008, and the Brexit referendum in the summer of 2016.
-                  </p>
-                  <img class='image-graph exchange_rate' align="middle" src='./img/exchangerate.png'/>
+                    <h4 class="service-heading">News Data</h4>
+                    <p class="section-subheading text-muted">Business news data was collected from The Guardian, a British newspaper. Weekly frequency was chosen to match the frequency of the financial data. The top 30 news articles each week in the business section in the period 2010-2016 was collected using the Guardian API and saved to a csv file. The csv was saved to <a href='https://s3.amazonaws.com/cs109data/articles_db.csv'>AWS S3</a></p>
+                    <p class="section-subheading text-muted">The articles were then filtered for relevance by counting the occurence of only words related to the economic health (from a predefined list of words grounded in economic theory)
+                    </p>
+                    <img class='image-graph senti-score' align="middle" src='./img/relevant_news.png'/>
+                    <p>On average there are at least 10 relevant business articles each week, with the number of relevant articles increasing after 2009.</p>
                 </div>
             </div>
         </div>
