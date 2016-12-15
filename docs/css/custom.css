@@ -122,3 +122,7 @@
   margin: auto;
   padding: 15px;
 }
+
+section h3.section-subheading {
+  margin-bottom: 35px
+}
