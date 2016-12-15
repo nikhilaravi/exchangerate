@@ -90,3 +90,13 @@
   clear: both;
   color: grey;
 }
+
+/*@media (min-width:768px) {
+  header .intro-text .intro-heading {
+    font-size: 4em
+  }
+  .navbar-right {
+    float: right !important;
+    margin-right:156px
+  }
+}*/
