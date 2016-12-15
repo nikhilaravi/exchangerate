@@ -186,7 +186,7 @@
         </div>
     </section>
 
-    <section id="sentiment" class="bg-light-gray">
+    <section id="sentiment" class="">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -197,7 +197,8 @@
                   <p class='method-heading'>SentiWordNet Methodology</p>
                   <p class='method-subheading'>1. Selection of Relevant Articles</p>
                   <p>
-                    From all the articles scrapped using an API of The Guardian newspaper, we first filtered based on relevance to exchange rates. This firstly involved building a small dictionary of words and phrases which would indicate relevance to exchnage rates. Then the contents of this dictionary was searched for in all the articles. We decided to filter the articles based on relevance to exchange rates, by considering the number of terms (our relevance threshold) from our exchange rate dictionary which were found in the articles. We visualised the average number of relevant articles weekly under different relevance thresholds (where a higher threshold results in a lower number of articles). After considering different relevance threshold values, we determined the optimal threshold to be 3 words. This was decided by ensuring that a sufficient number of articles were classed as relevant weekly in order to generate weekly sentiment scores (such that no week had zero relevant articles), whilst also ensuring an excessive number of irrelevant articles were excluded.
+                    From all the scraped articles, we first filtered based on relevance to economic health. This involved building a set of words and phrases based in economic theory to indicate relevance.
+                    The article were searched to test for the occurence of any of the words from the relevant set. An article was considered relevant if the number of terms matched in the relevance set was above a certain threshold. We visualised the average number of relevant articles weekly under different relevance thresholds (where a higher threshold results in a lower number of articles). After considering different values, we determined the optimal threshold to be 3 words. This was decided by ensuring that a sufficient number of articles were classed as relevant weekly in order to generate weekly sentiment scores (such that no week had zero relevant articles), whilst also ensuring an excessive number of irrelevant articles were excluded.
                     <div class="container">
                       <img class='image-graph' align="middle" src='./img/relevant_article_thresholds.png'/>
                     </div>
@@ -205,13 +206,14 @@
                   <p class='method-subheading'>2. Tokenizing</p>
                   <p class='method-subsubheading'>Splitting article body into sentences, then into words</p>
                   <p>
-                    SentinetWordNet provides a trained index of words and their corresponding positive, negtiave and netural sentiments (where the sum of these sentiments equal 1). To generate sentiments at an article level, we tokenised articles into words and used the mean average sentiment as the sentiment score for the entire article.
-                    A potential problem behind this method is that we may not obtain accurate sentiments for sections of the article which depend on more sophisticated understanding of the natural language at a phrase or sentence level. However, given the computation time required to use more sophisticated natural language processing techniques (such as Word2Vec or Doc2Vec) and the total number of articles to be considered across the time period, we proceed with the simpler model.
+                    SentinetWordNet provides a trained index of words and their corresponding positive, negative and netural sentiments (where the sum of these sentiments equal 1). To generate sentiments at an article level, the articles were processed into count vectors.  Stopwords were stripped and a dictionary of words was built using the entire corpus. The articles were then vectorised (count vectors of words in the dictionary). The mean sentiment of the words in the vector were used as the sentiment score for the entire article.
+
+                    A potential problem behind this method is that we may not obtain accurate sentiments for sections of the article which depend on more sophisticated understanding of the natural language at a phrase or sentence level. However, given the computation time required to use more sophisticated natural language processing techniques (such as Word2Vec or Doc2Vec) and the total number of articles to be considered across the time period, we decided to proceed with the simpler model.
                   </p>
                   <p class='method-subheading'>3. Filtering Neutrality</p>
                   <p class='method-subsubheading'>Removing sentences with neutral sentiment from the original article</p>
                   <p>
-                    Given each article, we removed any sentences which had very high neutal sentiment scores. This ensured that our sentiment score generator would only focus on sentences which implied strong sentiment, resolving a previous problem of obtaining very low positive/negative sentiment scores from our model. We also investigated what neutal sentiment scores would be the most effective for removing neutral sentiment sentences. This was done by considering different neutal sentiment score thresholds for sentence removals. For each of these thresholds, we calculated the sentiment scores of the articles (with neutral sentences removed) at a weekly level. Then this time series of positive and negative sentiment scores was compared with the exchange rate time series to obtain correlation values. We chose the optimal neutal sentiment score threshold by maximising the magnitude of correlation values. This gave an optimal neutal sentiment score threshold of 0.9.
+                    Given each article, we removed any sentences which had very high neutral sentiment scores. This ensured that our sentiment score generator would only focus on sentences which implied strong sentiment, resolving a previous problem of obtaining very low positive/negative sentiment scores from our model. We also investigated different neutral sentiment thresholds to see which would be the most effective for removing neutral sentiment sentences. For each of these thresholds, we calculated the sentiment scores of the articles (with neutral sentences removed) at a weekly level. This time series of positive and negative sentiment scores was compared with the exchange rate time series to obtain correlation values. We chose the optimal threshold by maximising the magnitude of correlation values. This gave an optimal threshold of 0.9 and all articles were processed using this value to remove neutral sentences
                   </p>
                   <p class='method-subheading'>4. Weekly sentiment</p>
                   <p class='method-subsubheading'>Averaging article sentiments at a weekly level to obtain weekly sentiment scores.</p>
@@ -221,12 +223,13 @@
                   <p class='method-subheading'>5. Smoothing</p>
                   <p class='method-subsubheading'>Reducing the weekly variance of sentiment scores with a rolling average</p>
                   <p>
-                    Having generated weekly sentiment scores, initially the high weekly variance did not allow any visible trends to be noticed. We resolved this by smoothing the weekly sentiment scores using a rolling average of a fixed number of preceding weeks. This idea has a natural motivation, which is that overall sentiment on a given week is also dependant on the sentiment of the previous few weeks. The optimal number of preceding weeks used to smoothen the scentiment scores was chosen by maximising the correlation between the exchange rate and the sentiment score time series. The smoothened sentiment scores now show visible correlation with the exchange rate, especially during times such as the Brexit Referendum. This is shown below.
+                    Having generated weekly sentiment scores, initially the high weekly variance did not allow any visible trends to be noticed. We resolved this by smoothing the weekly sentiment scores using a rolling average of a fixed number of preceeding weeks. This idea has a natural motivation - overall sentiment on a given week is also dependant on the sentiment of the previous few weeks. The optimal number of preceding weeks used to smoothen the sentiment scores was chosen by maximising the correlation between the exchange rate and the sentiment score time series. The smoothed sentiment scores now show visible correlation with the exchange rate, especially during times such as the Brexit referendum. This is shown below.
                   </p>
                 </div>
                 <div class="container">
                   <img class='image-graph' align="middle" src='./img/sentimentcorr.png'/>
                 </div>
+                <p> The weekly scores were saved and used in the multivariate prediction model</p>
             </div>
         </div>
         <div class="container">
@@ -243,132 +246,118 @@
                 </div>
                 <div class="col-lg-12 ">
                   <p class='method-heading'>Baseline Model</p>
-                  <h3 class="section-subheading text-muted">How well can we predict exchange rates without news sentiment analysis?</h3>
+                  <h3 class="section-subheading text-muted">How well can we predict exchange rates considering only past values?</h3>
+                  <p>
+                    In building a baseline model we considered several approaches including univariate versions of ARIMA models (autoregreesive integrated moving average models involving using lagged values of the response variable as well as moving average terms), and autoregressive models as well as multivariate models incorporating Libor rates and lastly sentiment scores.
+                  </p>
                   <p class='method-subheading'>Exchange Rate Series</p>
                   <p>
                     Let's take a look again at the exchange rate plot, zooming in on times of interest
                   </p>
-                  <img class='image-graph' align="middle" src='./img/full_exchange.png'/>
+                  <img class='time_series' align="middle" src='./img/full_exchange.png'/>
                   <p>
-                    First, take a look at the global financial crisis, and event that preciptated a drastic change in the UK-US exchange rate
+                    First, lets take a look at the global financial crisis, and event that preciptated a drastic change in the UK-US exchange rate.
                   </p>
-                  <img class='image-graph' align="middle" src='./img/fincrisis.png'/>
+                  <img class='time_series' align="middle" src='./img/fincrisis.png'/>
                   <p>
-                    Next, take a look at the at the time period around the Brexit referendum, which saw the value of the GBP at a local minimum relative to a 25 year time horizon
+                    Next, take a look at the at the time period around the Brexit referendum, which saw the value of the GBP at a local minimum relative to a 25 year time horizon.
                   </p>
-                  <img class='image-graph' align="middle" src='./img/brexit.png'/>
+                  <img class='time_series' align="middle" src='./img/brexit.png'/>
                   <p class='method-subheading'>Stationarity</p>
                   <p>
-                    An important assumption in much of models underlying time series analysis is that the mean and variance of the data data do not change
-                    over time; if the data has an underlying trend, this will certainly not be true.  As such, most time series
-                    analysis occurs on data rendered stationary, traditionally by taking first differences. After differencing, we
-                     see that aside from a time of extreme variation around the global financial crisis,
-                      data is reasonably stationary with mean zero and relatively stable variance outside of the 2008-2010 time frame.
-                      Keeping the anomalies of the financial crisis in mind, we can move on to the next segment in building our model.
+                    An important assumption in much of models underlying time series analysis is that the mean and variance of the data do not change over time; if the data has an underlying trend, this will certainly not be true.  As such, most time series analysis occurs on data rendered stationary, traditionally by taking first differences. After differencing, we see that aside from a time of extreme variation around the global financial crisis, data is reasonably stationary with mean zero and relatively stable variance outside of the 2008-2010 time frame. Keeping the anomalies of the financial crisis in mind, we can move on to the next segment in building our model.
                   </p>
-                  <img class='image-graph' align="middle" src='./img/firstdiff.png'/>
+                  <img class='time_series' align="middle" src='./img/firstdiff.png'/>
                   <p class='method-subheading'>Autocorrelation</p>
                   <p>
                     Let's first start by taking a deeper dive into the first lag of the first-differenced
                     exchange rate as this should give us some information as to whether or not a simple
-                    AR(1) process can adequately model our data.  If we see a non-zero slope to the correlation plot,
-                    we can infer that there is, in fact, a good relationship between this week's exchange rate and last week's
-                    exchange rate.
+                    AR(1) process can adequately model our data.  If we see a non-zero slope in the correlation plot,
+                    we can infer that there is, in fact, a good relationship between this week's exchange rate and last week's exchange rate.
                   </p>
-                  <img class='image-graph' align="middle" src='./img/joint.png'/>
+                  <img class='time_series' align="middle" src='./img/joint.png'/>
                   <p>
                     The first difference is almost certainly zero, with both axes having data appearing to be drawn
-                    from a roughly normal distribution with mean zero.  There does not appear to be much gleaned from relying entirely
-                    on the first lag.
+                    from a roughly normal distribution with mean zero.  There does not appear to be much gleaned from relying entirely on the first lag.
                   </p>
                   <p>
-                    Let's now take a look at further lags (lags 2 through 40) to see if there's any other information thats's available in prior lags.
+                    Let's now take a look at further lags (lags 2 through 40) to see if there is any other information available in prior lags.
                   </p>
-                  <img class='image-graph' align="middle" src='./img/autocorrelation.png'/>
+                  <img class='time_series' align="middle" src='./img/autocorrelation.png'/>
                   <p>
-                    The lags appear to bounce around zero--an AR process might not be able to glean all that
-                    much from the underlying data, although regularization might improve this, which we will discuss in a later segment.
+                    The lags appear to bounce around zero - an AR process might not be able to glean all that
+                    much from the underlying data, although regularization might improve this (discussed later)
                   </p>
                   <p class='method-heading'>Univariate ARMA models</p>
                   <p>
-                    Although we saw from the autocorrelation plot investigation above that AR processes will likely perform trivially,
-                    there's still a need to create a well-developed baseline model against which we will compare our sentiment score-augmented
-                    model.
+                    Although we saw from the autocorrelation plot above that an AR processes will likely perform trivially, a well-developed baseline model is required against which we will compare our sentiment score-augmented model.
                   </p>
                   <p>
-                    ARIMA models are set of time series methods that include autoregressive components (AR), differencing (I), and
-                    moving average terms (MA) in order to capture various dimensions by which time series trends can be described.
+                    ARIMA models are set of time series methods that include autoregressive components (AR), differencing (I), and moving average terms (MA) in order to capture various dimensions by which time series trends can be described.
                   </p>
-                  <img class='image-graph' align="middle" src='./img/acf.png'/>
+                  <img class='time_series' align="middle" src='./img/acf.png'/>
                   <p class='method-subheading'>AR model</p>
                   <p>
-                    As mentioned earlier, AR terms capture the number of lags to be used by the model. Here, we select an AR(6) process
-                    as the sixth lag is somewhat significant in both the ACF and PACF plots above.  The AR(6) process appears to perform quite well (although
-                    we should remember that exchange rates do not vary all too much week over week).
+                    As mentioned earlier, AR terms capture the number of lags to be used by the model. Here, we select an AR(6) process as the sixth lag is somewhat significant in both the ACF and PACF plots above.  The AR(6) process appears to perform quite well (although we should remember that exchange rates do not vary all too much week over week).
                   </p>
-                  <img class='image-graph' align="middle" src='./img/AR1.png'/>
+                  <img class='time_series' align="middle" src='./img/AR1.png'/>
                   <p class='method-subheading'>MA model</p>
                   <p>
-
-                    We also considered a standalone moving average model (using two moving average terms) for the sake of exploration.
-                    This appeared to attenuate the magnitude of our predictions and lead to a poor model result.
+                    We also considered a standalone moving average model (using two moving average terms) for the sake of exploration. This appeared to attenuate the magnitude of our predictions and lead to a poor model result.
                   </p>
-                  <img class='image-graph' align="middle" src='./img/MA.png'/>
+                  <img class='time_series' align="middle" src='./img/MA.png'/>
                   <p class='method-subheading'>ARMA model</p>
                   <p>
-                    Our final baseline model was an combined ARMA (6,5) process that yielded the lowest SSR on the data, with a plot of the prediction
-                    overlayed on the original data below.
+                    Our final baseline model was an combined ARMA (6,5) process that yielded the lowest RSS on the data, with a plot of the prediction overlayed on the original data below.
                   </p>
-                  <img class='image-graph' align="middle" src='./img/ARMA.png'/>
+                  <img class='time_series' align="middle" src='./img/ARMA.png'/>
                   <p class='method-heading'>Lasso regression model</p>
                   <p>
-                    An alternative time series modelling approach was considered involving using linear regression techniques. Matrices of predictors were generated with the lagged exchange rate data and this was used with Lasso regression to determine the coefficients of the lags. The data was of the form:
+                     For further improvements from the baseline model, several other models were considered including regression models with L1 and L2 regularisation.  This is equivalent to an autoregressive model and would enable us to examine the coefficients assigned to each lag.
                   </p>
                   <p class='method-subheading'>1. Create a matrix of lagged predictors </p>
-                  <p>For further improvements from the baseline model, several other models were considered including regression models with L1 and L2 regularisation.  This is equivalent to an autoregressive model and would enable us to examine the coefficients assigned to each lag.
-                  </p>
-                  <img class='equation' align="middle" src='./img/formula.png'/>
+                  <p>Matrices of predictors were generated with the lagged response variable and this was used with Lasso regression to determine the coefficients of the lags. The data was of the form:</p>
+                  <img class='equation1' align="middle" src='./img/formula.png'/>
                   <p>
                   To determine the number of lags used in our model, we split the given data into training and test sets and analysed the cross validation scores. This is gave 20 lags as being the optimal choice, as shown in the matrix above.
                   </p>
                   <p class='method-subheading'>2. Split into test and train sets and analyse model forecasts</p>
-
+                  <p>As the predictors are given by the rows of the predictor matrix, each observation is independent i.e. sequential slices of the data are no longer required for cross validation. The data was randomly split into test (40%) and train (60%) sets</p>
                   <p class='method-subheading'>3. Use lasso regression to fit a model to the training data</p>
                   <p>
-                    Having chosen the number of lags, we now fit a lasso regression model on the training data. We choose to use the lasso because it would give sparse coefficients in our prediction lag variables, so that potential interpretations can be made after the fit.
-                    Cross validated Lasso regression was used to optimise the hyperparameters.
+                    Having chosen the number of lags, we now fit a lasso regression model on the training data. We choose to use the lasso because it would give sparse coefficients in our prediction lag variables, so that potential interpretations can be made after the fit. Cross validated Lasso regression was used to optimise the hyperparameters.
                   </p>
                   <p class='method-subheading'>4a. Visualising the predictions on the test set</p>
                   <p>We first visualise the predictions from the lasso model on the test set, to obtain a sense of the overall fit compared to the actual data</p>
-                  <img class='image-graph' align="middle" src='./img/test_prediction.png'/>
+                  <img class='time_series' align="middle" src='./img/test_prediction.png'/>
                   <p>As visualised above, our predictions are close to the actual exchange rates on the test set</p>
-                  <p class='method-subheading'>4b. The regression coefficients of the fitted mode</p>
+                  <p class='method-subheading'>4b. The regression coefficients of the fitted model</p>
                   <p>We can analyse which of the time lags are the most significant in our model, by considering the fitted regression coefficients</p>
-                  <img class='image-graph' align="middle" src='./img/lasso_coeffs.png'/>
+                  <img class='time_series' align="middle" src='./img/lasso_coeffs.png'/>
                   <p>
                     Visualisation of the coefficient values shows that beyond the first lag, the subsequent lags have little predictive value. Lasso regression squashes the predictive power of some coefficients in favour of others, and in this case has put all the predictive power in the first lag.
                   </p>
                   <p class='method-subheading'>4c. Residual errors of the model</p>
                   <p>We can analyse the distribution of the residual errors of the model</p>
-                  <img class='image-graph' align="middle" src='./img/lasso_residuals.png'/>
+                  <img class='time_series' align="middle" src='./img/lasso_residuals.png'/>
                   <p>The residual errors have a distribution with mean approximately zero. This means on average our prediction model does not under or overestimate the actual values.</p>
 
 
                   <p class='method-heading'>Multivariate Lasso regression</p>
                   <p>A predictor matrix of containing 20 lags of preceeding exchange rate, 20 lags of preceding positive sentiment scores, and 20 lags of preceding negative sentiment scores was constructed of the form</p>
-                  <img class='equation' align="middle" src='./img/matrix_of_lags.png'/>
+                  <img class='equation2' align="middle" src='./img/matrix_of_lags.png'/>
                   <p>
                   As highlighted above, the first 20 columns of the matrix correspond to the exchange rate time series, the next 20 columns of the matrix correspond to the positive sentiment scores, and the last 20 columns of the matrix correspond to the negative sentiment scores.
                   </p>
                   <p>Again we can analyse which of the time lags and the positive/ negative sentiment lags are the most significant in our model, by considering the fitted regression coefficients</p>
-                  <img class='image-graph' align="middle" src='./img/lasso_coeffs_sentiment.png'/>
+                  <img class='time_series' align="middle" src='./img/lasso_coeffs_sentiment.png'/>
                   <p class='method-subheading'>Residual errors of the model</p>
                   <p>We can again analyse the distribution of the residual errors of the model</p>
-                  <img class='image-graph' align="middle" src='./img/lasso_sentiment_residuals.png'/>
+                  <img class='time_series' align="middle" src='./img/lasso_sentiment_residuals.png'/>
                   <p>The residual errors have a distribution with mean approximately zero. This means on average our prediction model does not under or overestimate the actual values.</p>
                   <p class='method-heading'>Model Comparison</p>
                   <p>Finally, we consider the R^2 values of the different models considered for comparison with our final foreact model which incorporated the sentiment scores.</p>
-                  <img class='image-graph' align="middle" src='./img/model_comparison.png'/>
+                  <img class='time_series' align="middle" src='./img/model_comparison.png'/>
                   <p> There is little increase in the predictive accuracy of the model with the incorporation of sentiment scores, showing that a baseline univariate model is in fact equally as useful as a more complex model with a larger predictor space</p>
             </div>
         </div>
@@ -378,7 +367,7 @@
     </section>
 
     <!-- Team Section -->
-    <section id="forecasting" class="bg-light-gray">
+    <section id="forecasting" class="">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -406,7 +395,7 @@
         </div>
     </section>
 
-    <section id="conclusions" class="bg-light-gray">
+    <section id="conclusions" class="">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -436,7 +425,7 @@
         </div>
     </section>
 
-    <section class="bg-light-gray">
+    <section class="">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -456,7 +445,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2 class="section-heading">Our Amazing Team</h2>
+                    <h2 class="section-heading">Our Team</h2>
                 </div>
             </div>
             <div class="row">
