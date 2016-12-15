@@ -79,6 +79,7 @@
 .btn-primary {
   margin-top: 0.6em;
 }
+
 .navbar-custom .nav li .dropdown-menu .dropdown-option {
   font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
   text-transform: uppercase;
@@ -125,6 +126,13 @@
 
 .forecast {
   width: 50em;
+  display: block;
+  margin: auto;
+  padding: 15px;
+}
+
+.time_series {
+  width: 40em;
   display: block;
   margin: auto;
   padding: 15px;
