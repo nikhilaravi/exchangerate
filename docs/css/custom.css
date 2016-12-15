@@ -109,7 +109,14 @@
   }
 }
 
-.equation {
+.equation1 {
+  width: 30em;
+  display: block;
+  margin: auto;
+  padding: 15px;
+}
+
+.equation2 {
   width: 50em;
   display: block;
   margin: auto;

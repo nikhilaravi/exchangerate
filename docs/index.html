@@ -317,7 +317,7 @@
                   <p class='method-subheading'>1. Create a matrix of lagged predictors </p>
                   <p>For further improvements from the baseline model, several other models were considered including regression models with L1 and L2 regularisation.  This is equivalent to an autoregressive model and would enable us to examine the coefficients assigned to each lag.
                   </p>
-                  <img class='equation' align="middle" src='./img/formula.png'/>
+                  <img class='equation1' align="middle" src='./img/formula.png'/>
                   <p>
                   To determine the number of lags used in our model, we split the given data into training and test sets and analysed the cross validation scores. This is gave 20 lags as being the optimal choice, as shown in the matrix above.
                   </p>
@@ -346,7 +346,7 @@
 
                   <p class='method-heading'>Multivariate Lasso regression</p>
                   <p>A predictor matrix of containing 20 lags of preceeding exchange rate, 20 lags of preceding positive sentiment scores, and 20 lags of preceding negative sentiment scores was constructed of the form</p>
-                  <img class='equation' align="middle" src='./img/matrix_of_lags.png'/>
+                  <img class='equation2' align="middle" src='./img/matrix_of_lags.png'/>
                   <p>
                   As highlighted above, the first 20 columns of the matrix correspond to the exchange rate time series, the next 20 columns of the matrix correspond to the positive sentiment scores, and the last 20 columns of the matrix correspond to the negative sentiment scores.
                   </p>
