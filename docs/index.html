@@ -312,12 +312,12 @@
                   <img class='time_series' align="middle" src='./img/MA.png'/>
                   <p class='method-subheading'>ARMA model</p>
                   <p>
-                    Our final baseline model was an combined ARMA (6,5) process that yielded the lowest RSS on the data, with a plot of the prediction overlayed on the original data below.
+                    Our final baseline model was a combined ARMA (6,5) process that yielded the lowest RSS on the data, with a plot of the prediction overlayed on the original data below.
                   </p>
                   <img class='time_series' align="middle" src='./img/ARMA.png'/>
                   <p class='method-heading'>Lasso regression model</p>
                   <p>
-                     For further improvements from the baseline model, several other models were considered including regression models with L1 and L2 regularisation.  This is equivalent to an autoregressive model and would enable us to examine the coefficients assigned to each lag.
+                    For further improvements from the baseline model, several other models were considered including regression models with L1 and L2 regularisation.  This is equivalent to an autoregressive model and would enable us to examine the magnitude of the coefficients assigned to each lag (i.e. the importance of each lag in generating a prediction).
                   </p>
                   <p class='method-subheading'>1. Create a matrix of lagged predictors </p>
                   <p>Matrices of predictors were generated with the lagged response variable and this was used with Lasso regression to determine the coefficients of the lags. The data was of the form:</p>
@@ -332,37 +332,34 @@
                     Having chosen the number of lags, we now fit a lasso regression model on the training data. We choose to use the lasso because it would give sparse coefficients in our prediction lag variables, so that potential interpretations can be made after the fit. Cross validated Lasso regression was used to optimise the hyperparameters.
                   </p>
                   <p class='method-subheading'>4a. Visualising the predictions on the test set</p>
-                  <p>We first visualise the predictions from the lasso model on the test set, to obtain a sense of the overall fit compared to the actual data</p>
+                  <p>We first visualise the predictions from the lasso model on the test set, to obtain a sense of the overall fit compared to the actual valus</p>
                   <img class='time_series' align="middle" src='./img/test_prediction.png'/>
-                  <p>As visualised above, our predictions are close to the actual exchange rates on the test set</p>
+                  <p>As visualised above, our predictions are close to the actual exchange rates on the test set and the R2 of the model is high (0.987)</p>
                   <p class='method-subheading'>4b. The regression coefficients of the fitted model</p>
-                  <p>We can analyse which of the time lags are the most significant in our model, by considering the fitted regression coefficients</p>
+                  <p>We can analyse which of the time lags are the most significant in our model by considering the fitted regression coefficients</p>
                   <img class='time_series' align="middle" src='./img/lasso_coeffs.png'/>
                   <p>
                     Visualisation of the coefficient values shows that beyond the first lag, the subsequent lags have little predictive value. Lasso regression squashes the predictive power of some coefficients in favour of others, and in this case has put all the predictive power in the first lag.
                   </p>
                   <p class='method-subheading'>4c. Residual errors of the model</p>
-                  <p>We can analyse the distribution of the residual errors of the model</p>
+                  <p>We can analyse the distribution of the residual errors of the model to determine if there is a predictive bias</p>
                   <img class='time_series' align="middle" src='./img/lasso_residuals.png'/>
                   <p>The residual errors have a distribution with mean approximately zero. This means on average our prediction model does not under or overestimate the actual values.</p>
-
-
+                  <p>The univariate model is seen to have high predictive accuracy in determining the exchange rate for the following week, however forecasts further in the future are likely to have much lower accuracy (discussed later) and in these situations, the effect of news sentiment may be useful</p>
                   <p class='method-heading'>Multivariate Lasso regression</p>
-                  <p>A predictor matrix of containing 20 lags of preceeding exchange rate, 20 lags of preceding positive sentiment scores, and 20 lags of preceding negative sentiment scores was constructed of the form</p>
+                  <p>A predictor matrix containing 20 lags of preceeding exchange rate, 20 lags of preceeding positive sentiment scores, and 20 lags of preceeding negative sentiment scores was constructed of the form</p>
                   <img class='equation2' align="middle" src='./img/matrix_of_lags.png'/>
-                  <p>
-                  As highlighted above, the first 20 columns of the matrix correspond to the exchange rate time series, the next 20 columns of the matrix correspond to the positive sentiment scores, and the last 20 columns of the matrix correspond to the negative sentiment scores.
-                  </p>
                   <p>Again we can analyse which of the time lags and the positive/ negative sentiment lags are the most significant in our model, by considering the fitted regression coefficients</p>
                   <img class='time_series' align="middle" src='./img/lasso_coeffs_sentiment.png'/>
+                  <p>The lasso regression model has assigned high positive predictive value to the first lag as before, but the coefficients of lags of the sentiment scores are also seen to have non-zero magnitude. The positive sentiment score approximately 5 weeks prior, as well as the negative sentiment score approximately 3 weeks prior are both seen to have large coefficient values. The coefficients vary for different testing and training sets indicating that the high values for sentiment in certain weeks may be random - i.e. the important lags of sentiment are not the same over time. This will be investigated further in our future work. </p>
                   <p class='method-subheading'>Residual errors of the model</p>
                   <p>We can again analyse the distribution of the residual errors of the model</p>
                   <img class='time_series' align="middle" src='./img/lasso_sentiment_residuals.png'/>
                   <p>The residual errors have a distribution with mean approximately zero. This means on average our prediction model does not under or overestimate the actual values.</p>
                   <p class='method-heading'>Model Comparison</p>
-                  <p>Finally, we consider the R^2 values of the different models considered for comparison with our final foreact model which incorporated the sentiment scores.</p>
+                  <p>Finally, we consider the R^2 values of the different models considered for comparison with our final foreact model which incorporates the sentiment scores.</p>
                   <img class='time_series' align="middle" src='./img/model_comparison.png'/>
-                  <p> There is little increase in the predictive accuracy of the model with the incorporation of sentiment scores, showing that a baseline univariate model is in fact equally as useful as a more complex model with a larger predictor space</p>
+                  <p> There is little increase in the predictive accuracy of the model with the incorporation of sentiment scores, showing that a simpler univariate model is in fact equally as useful as a more complex model with a larger predictor space</p>
             </div>
         </div>
         <div class="container">
@@ -393,6 +390,9 @@
                 Looking more closely at the direction of prediction, during the sharp fall in exchange rates during the financial crisis (late 2008), the predictions are in the positive direction, and it takes several months before the direction of prediction aligns with the local direction of movement. Following the financial crisis, the predictions all show the value decreasing from the value at the local time point. This analysis shows that long horizon forecasts of the exchange rate are difficult and most probably inaccurate.
                 </p>
             </div>
+            <p class='method-heading'>Model Comparison</p>
+            <p>Considering the R^2 values of the different models for one week forecasts, the ARMA model is seen to have the lowest accuracy. A univariate lasso model is almost equally as good as a model with sentiment scores included suggesting that the sentiment scores provide little additional predictive power.
+            </p>
         </div>
         <div class="container">
           <a class="btn btn-xl view-button " href="./forecasting.html">View the Code</a>
@@ -406,26 +406,32 @@
                     <h2 class="section-heading">Conclusions</h2>
                 </div>
             </div>
-            <div class="container page-body-text">
-              In this project our goal was to predict future exchange rates at a weekly level. Using techniques from time series analysis and SentiWordNet, we developed models for exchange rate prediction which incorporated weekly sentiment scores from relevant news articles. As hypothesised, we found that incorporating sentiment scores into the time series model gives an improvement in prediction accuracy. A final comparison of our prediction model (incorporating sentiment scores) with a time series model not incorporating sentiment scores and a simple baseline model is highlighted in the table below.
-            </div>
+            <p class="container page-body-text">
+              In this project our goal was to predict future exchange rates at a weekly level. Using techniques from time series analysis and SentiWordNet, we developed models for exchange rate prediction which incorporated weekly sentiment scores from relevant news articles. We found that the addition of sentiment scores into the model does not necessarily result in an improvement in prediction accuracy, contrary to our initial hypothesis.
+            </p>
+            <p>
+              This is actually consistent with existing research literature (see [3]), where it is found that news sentiments are useful in indicating the direction of exchange rate movements but ineffective in predicting the magnitude of the exchange rate movements. Therefore, incorporating the sentiment scores through a large predictor space does not necessarily lead to improved predictive accuracy.
+            </p>
+            <p>
+              This project has highlighted the intrinsic difficulties of predicting exchange rates using news sentiments. As the exchange rate market is so liquid and fast-paced, any impact from extraneous events is reflected immediately on the rates, often much sooner than when an article is written about these events. Perhaps for future work it may be more fruitful to consider sentiment of news sources such as Twitter where news is reported much faster.
+            </p>
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-subheading">Future Work</h2>
                 </div>
             </div>
-            <div class="container page-body-text">
+            <p class="container page-body-text">
               There are various areas we can investigate to further improve our model and develop this project:
-              <ol>
+              <ol class="page-body-text">
                 <li> Differencing the exchange rate time series data in forming the predictor matrix </li>
-                <li>Adding differenced sentiment scores</li>
-                <li>Elastic net regularisation</li>
+                <li> Adding differenced sentiment scores, under the hypothesis that changes in the sentiment could rive changes in the exchange rate rather than absolute values</li>
+                <li>Elastic net regularisation using the matrix of lagged predictors (a combination of L1 and L2 regularisation)</li>
                 <li>Vector autoregressive models</li>
                 <li>Investigate more sophisticated models such as AFIRMA which are commonly used for forecasting high frequency time series data</li>
                 <li>Incorporate sentiment scores from a wider range of news sources outside the Guardian</li>
                 <li>Investigate more sophisticated natural language processing techniques such as Word2Vec or Doc2Vec which can consider articles at a sentence level rather than a word level</li>
               </ol>
-            </div>
+            </p>
         </div>
     </section>
 
@@ -459,11 +465,10 @@
                         <h4>Nikhila Ravi</h4>
                         <p class="text-muted">Engineering and Applied Sciences</p>
                         <ul class="list-inline social-buttons">
-                            <li><a href="#"><i class="fa fa-twitter"></i></a>
+                            <li><a href="https://twitter.com/nikhilaravi"><i class="fa fa-twitter"></i></a>
                             </li>
-                            <li><a href="#"><i class="fa fa-facebook"></i></a>
                             </li>
-                            <li><a href="#"><i class="fa fa-linkedin"></i></a>
+                            <li><a href="https://uk.linkedin.com/in/nikhilaravi"><i class="fa fa-linkedin"></i></a>
                             </li>
                         </ul>
                     </div>
@@ -476,7 +481,6 @@
                         <ul class="list-inline social-buttons">
                             <li><a href="#"><i class="fa fa-twitter"></i></a>
                             </li>
-                            <li><a href="#"><i class="fa fa-facebook"></i></a>
                             </li>
                             <li><a href="#"><i class="fa fa-linkedin"></i></a>
                             </li>
@@ -491,7 +495,6 @@
                         <ul class="list-inline social-buttons">
                             <li><a href="#"><i class="fa fa-twitter"></i></a>
                             </li>
-                            <li><a href="#"><i class="fa fa-facebook"></i></a>
                             </li>
                             <li><a href="#"><i class="fa fa-linkedin"></i></a>
                             </li>
